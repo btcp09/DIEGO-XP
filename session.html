@@ -3,131 +3,109 @@
 <head>
   <meta charset="UTF-8">
   <title>Sesión del Grupo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    html {
-      font-size: 18px;
-    }
-    body {
-      background: #101010;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-    }
-    .timer {
-      font-size: 2.5em;
-      margin: 28px 0 18px 0;
-      color: #00eaff;
-      font-weight: bold;
-    }
-    .formulario {
-      margin: 30px auto;
-      max-width: 400px;
-      width: 95vw;
-    }
-    .input {
-      padding: 18px;
-      margin: 16px 0;
-      width: 90%;
-      font-size: 1.3em;
-      border-radius: 12px;
-      border: none;
-      background: #232323;
-      color: #fff;
-      outline: none;
-      box-sizing: border-box;
-    }
-    .btn {
-      padding: 16px 38px;
-      font-size: 1.3em;
-      border-radius: 12px;
-      border: none;
-      background: linear-gradient(90deg,#00eaff,#ff69b4,#ffea00,#00ff99);
-      color: #181818;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 18px;
-      margin-bottom: 18px;
-      transition: background 0.2s;
-      box-shadow: 0 0 10px #00eaff44;
-    }
-    .btn:active {
-      background: #00eaff;
-      color: #fff;
-    }
-    .group-title {
-      font-size: 2em;
-      font-weight: bold;
-      margin-top: 38px;
-      margin-bottom: 18px;
-      color: #ff69b4;
-      letter-spacing: 1px;
-      word-break: break-word;
-    }
-    .info {
-      font-size: 1.1em;
-      margin-bottom: 18px;
-      color: #ffea00;
-    }
-    @media (max-width: 600px) {
-      html { font-size: 15px; }
-      .timer { font-size: 1.5em; }
-      .group-title { font-size: 1.2em; }
-      .input { font-size: 1em; padding: 12px; }
-      .btn { font-size: 1em; padding: 10px 18px; }
-      .info { font-size: 1em; }
-    }
-    @media (max-width: 400px) {
-      html { font-size: 13px; }
-      .timer { font-size: 1.1em; }
-      .group-title { font-size: 1em; }
-    }
+    body { background: #101010; color: #fff; font-family: Arial, sans-serif; text-align: center; }
+    .timer { font-size: 2em; margin: 18px 0; color: #00eaff; }
+    .formulario { margin: 20px auto; max-width: 320px; }
+    .input { padding: 8px; margin: 6px 0; width: 90%; border-radius: 8px; border: none; }
+    .btn { background: #00eaff; color: #101010; font-weight: bold; border: none; border-radius: 8px; padding: 10px 24px; cursor: pointer; margin-top: 10px; }
+    .btn:hover { background: #ff0055; color: #fff; }
+    .success { color: #00ff99; margin-top: 10px; }
+    .counter { margin: 10px 0; color: #ffea00; }
+    .link { color: #00eaff; word-break: break-all; }
+    .msg-info { color: #ffea00; margin-bottom: 10px; font-size: 1.05em; }
   </style>
 </head>
 <body>
-  <div class="group-title" id="groupTitle"></div>
-  <div class="timer" id="timer"></div>
-  <div class="info" id="info"></div>
-  <form class="formulario">
-    <input class="input" type="text" placeholder="Tu nombre" required>
-    <button class="btn" type="submit">Entrar</button>
-  </form>
-  <script>
-    // Récupérer les paramètres d'URL
-    function getParam(name) {
-      const url = new URL(window.location.href);
-      return url.searchParams.get(name) || "";
-    }
-    // Afficher le nom du groupe
-    const group = decodeURIComponent(getParam("groupe") || "");
-    document.getElementById('groupTitle').textContent = group ? "Grupo: " + group : "Sesión de Grupo";
+  <!-- Musique automatique -->
+  <audio id="audio2" src="https://files.catbox.moe/3sitln.mp3" autoplay></audio>
+  <audio id="audio3" src="https://files.catbox.moe/q702ow.m4a"></audio>
 
-    // Timer
-    const timerDiv = document.getElementById('timer');
-    const infoDiv = document.getElementById('info');
-    let duree = parseInt(getParam("duree") || "0");
-    if (duree > 0) {
-      let end = Date.now() + duree * 1000;
-      function updateTimer() {
-        let left = Math.max(0, Math.floor((end - Date.now()) / 1000));
-        let h = Math.floor(left / 3600);
-        let m = Math.floor((left % 3600) / 60);
-        let s = left % 60;
-        timerDiv.textContent = (h > 0 ? h + "h " : "") + (m > 0 ? m + "m " : "") + s + "s";
-        if (left <= 0) {
-          timerDiv.textContent = "Sesión terminada";
-          infoDiv.textContent = "";
-        } else {
-          setTimeout(updateTimer, 1000);
-        }
+  <h1 id="groupTitle"></h1>
+  <div class="timer" id="timer"></div>
+  <div class="counter">Participantes: <span id="count">0</span></div>
+  <div class="link" id="link"></div>
+  <div class="msg-info">Por favor, introduce tu número con el código de país (ejemplo: +509...)</div>
+  <div class="formulario">
+    <input class="input" id="nombre" type="text" placeholder="Tu nombre"><br>
+    <input class="input" id="numero" type="tel" placeholder="Tu número con código de país"><br>
+    <button class="btn" onclick="agregar()">Registrar</button>
+    <div class="success" id="msg"></div>
+  </div>
+  <div id="descargar" style="display:none;">
+    <a class="btn" href="#" id="vcfLink" download="grupo.vcf">Descargar archivo VCF</a>
+  </div>
+  <script>
+    // Musique enchaînée
+    const audio2 = document.getElementById('audio2');
+    const audio3 = document.getElementById('audio3');
+    audio2.addEventListener('ended', () => {
+      audio3.play();
+    });
+
+    // Récupérer les paramètres
+    const params = new URLSearchParams(window.location.search);
+    const group = decodeURIComponent(params.get("groupe") || "");
+    const duracion = parseInt(params.get("duree") || "0");
+    const id = params.get("id") || "";
+    document.getElementById("groupTitle").textContent = "Grupo: " + group;
+    document.getElementById("link").textContent = window.location.href;
+
+    // Chronomètre
+    let tiempoRestante = duracion;
+    function updateTimer() {
+      let min = Math.floor(tiempoRestante / 60);
+      let seg = tiempoRestante % 60;
+      document.getElementById("timer").textContent = 
+        "Tiempo restante: " + min + "m " + seg + "s";
+      if (tiempoRestante > 0) {
+        tiempoRestante--;
+        setTimeout(updateTimer, 1000);
+      } else {
+        document.getElementById("descargar").style.display = "block";
+        document.getElementById("timer").textContent = "¡Tiempo terminado!";
+        generarVCF();
       }
-      updateTimer();
-      infoDiv.textContent = "Tiempo restante para esta sesión";
-    } else {
-      timerDiv.textContent = "";
-      infoDiv.textContent = "";
+    }
+    if (duracion > 0) updateTimer();
+
+    // Stockage local pour les participants
+    let participantes = JSON.parse(localStorage.getItem("vcf_" + id) || "[]");
+    function actualizarContador() {
+      document.getElementById("count").textContent = participantes.length;
+    }
+    actualizarContador();
+
+    function agregar() {
+      const nombre = document.getElementById("nombre").value.trim();
+      const numero = document.getElementById("numero").value.trim();
+      if (!nombre || !numero) {
+        document.getElementById("msg").textContent = "Completa todos los campos.";
+        return;
+      }
+      if (!numero.match(/^\+\d{6,}$/)) {
+        document.getElementById("msg").textContent = "Introduce un número válido con el código de país.";
+        return;
+      }
+      if (participantes.some(p => p.numero === numero)) {
+        document.getElementById("msg").textContent = "Este número ya está registrado.";
+        return;
+      }
+      participantes.push({nombre, numero});
+      localStorage.setItem("vcf_" + id, JSON.stringify(participantes));
+      document.getElementById("msg").textContent = "¡Tu número ha sido registrado con éxito!";
+      actualizarContador();
+    }
+
+    // Générer le fichier VCF
+    function generarVCF() {
+      let vcf = "";
+      participantes.forEach(p => {
+        vcf += `BEGIN:VCARD\nVERSION:3.0\nFN:${p.nombre}\nTEL;TYPE=CELL:${p.numero}\nEND:VCARD\n`;
+      });
+      const blob = new Blob([vcf], {type: "text/vcard"});
+      const url = URL.createObjectURL(blob);
+      document.getElementById("vcfLink").href = url;
     }
   </script>
 </body>
