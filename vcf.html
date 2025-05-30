@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>BASTIEN-XP VCF</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html {
+      font-size: 17px;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #101010;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .glow-marquee {
+      width: 100vw;
+      overflow: hidden;
+      white-space: nowrap;
+      margin-top: 60px;
+      margin-bottom: 30px;
+      font-size: 3em;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      filter: drop-shadow(0 0 18px #00eaff) drop-shadow(0 0 8px #fff);
+      animation: glowmove 6s linear infinite alternate;
+      background: linear-gradient(90deg, #ff0055, #00ff99, #ffea00, #a259ff, #ff00ff, #00eaff, #ff0055);
+      background-size: 400% 400%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+      line-height: 1.1;
+    }
+    @keyframes glowmove {
+      0% { transform: translateX(-30vw);}
+      100% { transform: translateX(30vw);}
+    }
+    .group-box {
+      margin: 40px 0 24px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .group-label {
+      font-size: 2em;
+      font-weight: bold;
+      margin-bottom: 12px;
+      letter-spacing: 0.04em;
+    }
+    .group-input-wrap {
+      border: 3px solid;
+      border-image: linear-gradient(90deg, #ff0055, #00ff99, #ffea00, #a259ff, #ff00ff, #00eaff, #ff0055) 1;
+      border-radius: 18px;
+      padding: 14px 28px;
+      background: #181818;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 0 18px #fff4, 0 0 40px #0ff2;
+      transition: box-shadow 0.2s;
+    }
+    .group-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 1.5em;
+      width: 220px;
+      padding: 14px 0;
+    }
+    .duration-box {
+      margin: 40px 0 24px 0;
+      width: 380px;
+      max-width: 98vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .duration-label {
+      font-size: 1.7em;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+    .slider-wrap {
+      width: 100%;
+      position: relative;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .slider-line {
+      width: 100%;
+      height: 10px;
+      background: #1e90ff;
+      border-radius: 5px;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+    }
+    .slider-ball {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ff2222;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+      box-shadow: 0 0 12px #ff2222, 0 0 24px #fff4;
+      transition: box-shadow 0.2s;
+      border: 2px solid #fff;
+      z-index: 2;
+    }
+    .duration-value {
+      margin-top: 6px;
+      font-size: 1.5em;
+      color: #00eaff;
+      font-weight: bold;
+      text-shadow: 0 0 8px #000;
+    }
+    .creer-box {
+      margin: 40px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .creer-btn {
+      font-size: 2em;
+      font-weight: bold;
+      padding: 22px 70px;
+      border: none;
+      border-radius: 22px;
+      background: linear-gradient(90deg, #ff0055, #00ff99, #ff00ff, #ffea00, #a259ff, #ff0055);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 24px #fff4, 0 0 60px #0ff2;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-bottom: 16px;
+      outline: none;
+      position: relative;
+      z-index: 2;
+      letter-spacing: 0.04em;
+    }
+    .creer-btn:hover {
+      transform: scale(1.06);
+      box-shadow: 0 0 40px #fff8, 0 0 100px #0ff6;
+    }
+    .success-msg {
+      margin-top: 22px;
+      color: #00ff99;
+      font-weight: bold;
+      font-size: 1.5em;
+      text-align: center;
+      text-shadow: 0 0 10px #000, 0 0 20px #0f0;
+      animation: fadeIn 1s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0;}
+      to { opacity: 1;}
+    }
+    .link-box {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .generated-link {
+      background: #222;
+      color: #00eaff;
+      padding: 16px 28px;
+      border-radius: 14px;
+      font-size: 1.3em;
+      margin-bottom: 10px;
+      word-break: break-all;
+      border: 1px solid #00eaff;
+      box-shadow: 0 0 10px #00eaff44;
+    }
+    .copy-btn {
+      background: linear-gradient(90deg, #ff0055, #00ff99, #ff00ff, #ffea00, #a259ff, #ff0055);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 28px;
+      font-size: 1.3em;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .copy-btn:hover {
+      background: linear-gradient(270deg, #ff0055, #00ff99, #ff00ff, #ffea00, #a259ff, #ff0055);
+      transform: scale(1.05);
+    }
+    .nav-top {
+      width: 100vw;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 24px 0 0 24px;
+      position: absolute;
+      top: 0; left: 0;
+      z-index: 10;
+    }
+    .nav-link {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #00eaff;
+      text-decoration: underline;
+      cursor: pointer;
+      background: none;
+      border: none;
+      outline: none;
+      margin-right: 24px;
+      transition: color 0.2s;
+    }
+    .nav-link:hover {
+      color: #ff0055;
+    }
+    @media (max-width: 600px) {
+      html { font-size: 15px; }
+      .glow-marquee { font-size: 1.3em; }
+      .group-label { font-size: 1.1em; }
+      .group-input { width: 110px; font-size: 1em; }
+      .duration-box { width: 98vw; }
+      .slider-wrap { min-width: 120px; }
+      .creer-btn { font-size: 1.1em; padding: 10px 20px; }
+      .generated-link { font-size: 1em; padding: 8px 10px; }
+      .copy-btn { font-size: 1em; padding: 8px 12px; }
+      .nav-link { font-size: 1em; margin-right: 10px; }
+      .duration-label { font-size: 1em; }
+    }
+    @media (max-width: 400px) {
+      html { font-size: 13px; }
+      .glow-marquee { font-size: 1em; }
+      .group-label { font-size: 0.9em; }
+      .duration-label { font-size: 0.9em; }
+      .nav-link { font-size: 0.9em; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Música automática -->
+  <audio id="audio1" src="https://files.catbox.moe/eazif5.mp3" autoplay></audio>
+
+  <!-- Navegación -->
+  <div class="nav-top">
+    <button class="nav-link" onclick="goHome()">Inicio</button>
+    <button class="nav-link" onclick="goServices()">Servicios</button>
+  </div>
+
+  <!-- Texto luminoso animado -->
+  <div class="glow-marquee" id="glowText">BIENVENIDO A BASTIEN-XP</div>
+
+  <!-- Entrada del nombre del grupo -->
+  <div class="group-box">
+    <div class="group-label">Nombre del grupo</div>
+    <div class="group-input-wrap">
+      <input class="group-input" id="groupName" type="text" maxlength="32" placeholder="Introduce el nombre del grupo" autocomplete="off">
+    </div>
+  </div>
+
+  <!-- Slider duración -->
+  <div class="duration-box">
+    <div class="duration-label">Duración de la sesión</div>
+    <div class="slider-wrap" id="sliderWrap">
+      <div class="slider-line"></div>
+      <div class="slider-ball" id="sliderBall"></div>
+    </div>
+    <div class="duration-value" id="durationValue">1 día</div>
+  </div>
+
+  <!-- Botón Crear -->
+  <div class="creer-box" id="creerBox" style="display:none;">
+    <button class="creer-btn" onclick="creerSession()">CREAR</button>
+    <div class="success-msg" id="successMsg" style="display:none;">Tu sesión ha sido creada con éxito.</div>
+    <div class="link-box" id="linkBox" style="display:none;">
+      <div class="generated-link" id="generatedLink"></div>
+      <button class="copy-btn" onclick="copyLink()">Copiar enlace</button>
+    </div>
+  </div>
+
+  <script>
+    // Navegación
+    function goHome() {
+      window.location.href = "index.html";
+    }
+    function goServices() {
+      window.location.href = "page.html";
+    }
+
+    // Slider duración
+    const sliderWrap = document.getElementById('sliderWrap');
+    const sliderBall = document.getElementById('sliderBall');
+    const durationValue = document.getElementById('durationValue');
+    let dragging = false;
+    const minMs = 5 * 60 * 1000; // 5 min
+    const maxMs = 7 * 24 * 60 * 60 * 1000; // 7 días
+    let currentMs = 24 * 60 * 60 * 1000; // 1 día por defecto
+
+    function msToText(ms) {
+      if (ms < 60 * 60 * 1000) {
+        return Math.round(ms / (60 * 1000)) + " min";
+      } else if (ms < 24 * 60 * 60 * 1000) {
+        return Math.round(ms / (60 * 60 * 1000)) + " h";
+      } else {
+        return Math.round(ms / (24 * 60 * 60 * 1000)) + " día" + (Math.round(ms / (24 * 60 * 60 * 1000)) > 1 ? "s" : "");
+      }
+    }
+    function updateSlider(pos) {
+      const rect = sliderWrap.getBoundingClientRect();
+      let x = pos - rect.left;
+      x = Math.max(0, Math.min(x, rect.width));
+      const percent = x / rect.width;
+      currentMs = minMs + percent * (maxMs - minMs);
+      currentMs = Math.round(currentMs / (60 * 1000)) * (60 * 1000);
+      sliderBall.style.left = (percent * 100) + "%";
+      durationValue.textContent = msToText(currentMs);
+    }
+    function setSliderByMs(ms) {
+      const percent = (ms - minMs) / (maxMs - minMs);
+      sliderBall.style.left = (percent * 100) + "%";
+      durationValue.textContent = msToText(ms);
+    }
+    sliderWrap.addEventListener('mousedown', function(e) {
+      dragging = true;
+      updateSlider(e.clientX);
+    });
+    document.addEventListener('mousemove', function(e) {
+      if (dragging) updateSlider(e.clientX);
+    });
+    document.addEventListener('mouseup', function() {
+      dragging = false;
+    });
+    sliderWrap.addEventListener('touchstart', function(e) {
+      dragging = true;
+      updateSlider(e.touches[0].clientX);
+    });
+    document.addEventListener('touchmove', function(e) {
+      if (dragging) updateSlider(e.touches[0].clientX);
+    });
+    document.addEventListener('touchend', function() {
+      dragging = false;
+    });
+    setSliderByMs(currentMs);
+
+    // Mostrar botón Crear si el nombre del grupo está lleno
+    const groupName = document.getElementById('groupName');
+    const creerBox = document.getElementById('creerBox');
+    groupName.addEventListener('input', function() {
+      creerBox.style.display = groupName.value.trim() ? "flex" : "none";
+    });
+
+    // Generar enlace y mostrar mensaje
+    function creerSession() {
+      document.getElementById('successMsg').style.display = "block";
+      const nom = encodeURIComponent(groupName.value.trim());
+      const duree = Math.floor(currentMs / 1000);
+      const unique = Math.random().toString(36).substring(2, 10);
+      const lien = `session.html?groupe=${nom}&duree=${duree}&id=${unique}`;
+      document.getElementById('generatedLink').innerHTML = `<a href="${lien}" target="_blank" onclick="document.getElementById('audio1').pause()" style="color:#00eaff;text-decoration:underline;">${lien}</a>`;
+      document.getElementById('linkBox').style.display = "flex";
+    }
+    function copyLink() {
+      const text = document.getElementById('generatedLink').innerText;
+      navigator.clipboard.writeText(text);
+    }
+  </script>
+</body>
+</html>

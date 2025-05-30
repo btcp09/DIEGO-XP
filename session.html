@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Sesión del Grupo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html {
+      font-size: 18px;
+    }
+    body {
+      background: #101010;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    .timer {
+      font-size: 2.5em;
+      margin: 28px 0 18px 0;
+      color: #00eaff;
+      font-weight: bold;
+    }
+    .formulario {
+      margin: 30px auto;
+      max-width: 400px;
+      width: 95vw;
+    }
+    .input {
+      padding: 18px;
+      margin: 16px 0;
+      width: 90%;
+      font-size: 1.3em;
+      border-radius: 12px;
+      border: none;
+      background: #232323;
+      color: #fff;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .btn {
+      padding: 16px 38px;
+      font-size: 1.3em;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(90deg,#00eaff,#ff69b4,#ffea00,#00ff99);
+      color: #181818;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 18px;
+      margin-bottom: 18px;
+      transition: background 0.2s;
+      box-shadow: 0 0 10px #00eaff44;
+    }
+    .btn:active {
+      background: #00eaff;
+      color: #fff;
+    }
+    .group-title {
+      font-size: 2em;
+      font-weight: bold;
+      margin-top: 38px;
+      margin-bottom: 18px;
+      color: #ff69b4;
+      letter-spacing: 1px;
+      word-break: break-word;
+    }
+    .info {
+      font-size: 1.1em;
+      margin-bottom: 18px;
+      color: #ffea00;
+    }
+    @media (max-width: 600px) {
+      html { font-size: 15px; }
+      .timer { font-size: 1.5em; }
+      .group-title { font-size: 1.2em; }
+      .input { font-size: 1em; padding: 12px; }
+      .btn { font-size: 1em; padding: 10px 18px; }
+      .info { font-size: 1em; }
+    }
+    @media (max-width: 400px) {
+      html { font-size: 13px; }
+      .timer { font-size: 1.1em; }
+      .group-title { font-size: 1em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="group-title" id="groupTitle"></div>
+  <div class="timer" id="timer"></div>
+  <div class="info" id="info"></div>
+  <form class="formulario">
+    <input class="input" type="text" placeholder="Tu nombre" required>
+    <button class="btn" type="submit">Entrar</button>
+  </form>
+  <script>
+    // Récupérer les paramètres d'URL
+    function getParam(name) {
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name) || "";
+    }
+    // Afficher le nom du groupe
+    const group = decodeURIComponent(getParam("groupe") || "");
+    document.getElementById('groupTitle').textContent = group ? "Grupo: " + group : "Sesión de Grupo";
+
+    // Timer
+    const timerDiv = document.getElementById('timer');
+    const infoDiv = document.getElementById('info');
+    let duree = parseInt(getParam("duree") || "0");
+    if (duree > 0) {
+      let end = Date.now() + duree * 1000;
+      function updateTimer() {
+        let left = Math.max(0, Math.floor((end - Date.now()) / 1000));
+        let h = Math.floor(left / 3600);
+        let m = Math.floor((left % 3600) / 60);
+        let s = left % 60;
+        timerDiv.textContent = (h > 0 ? h + "h " : "") + (m > 0 ? m + "m " : "") + s + "s";
+        if (left <= 0) {
+          timerDiv.textContent = "Sesión terminada";
+          infoDiv.textContent = "";
+        } else {
+          setTimeout(updateTimer, 1000);
+        }
+      }
+      updateTimer();
+      infoDiv.textContent = "Tiempo restante para esta sesión";
+    } else {
+      timerDiv.textContent = "";
+      infoDiv.textContent = "";
+    }
+  </script>
+</body>
+</html>

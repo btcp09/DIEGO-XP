@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Misterio - Test 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background: #181818;
+      color: #fff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .titulo {
+      color: #ff69b4;
+      font-size: 2.5em;
+      font-weight: bold;
+      margin-top: 40px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .bloque {
+      background: #232323;
+      border-radius: 18px;
+      padding: 24px 18px;
+      margin: 18px 0;
+      box-shadow: 0 0 12px #0006;
+      width: 95%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .label {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #ffb6e6;
+      text-align: center;
+    }
+    .input-row {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .timer {
+      color: #00eaff;
+      font-size: 1.1em;
+      font-weight: bold;
+      margin-right: 10px;
+      min-width: 38px;
+      text-align: right;
+    }
+    .input {
+      flex: 1;
+      padding: 12px;
+      font-size: 1.1em;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      margin-right: 10px;
+      background: #222;
+      color: #fff;
+      transition: background 0.2s;
+    }
+    .input[disabled] {
+      background: #444;
+      color: #bbb;
+    }
+    .check-btn {
+      background: #00ff99;
+      color: #181818;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      font-size: 1.3em;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .check-btn:disabled {
+      background: #444;
+      color: #888;
+      cursor: not-allowed;
+    }
+    .msg {
+      color: #ff0055;
+      font-size: 1.1em;
+      margin-top: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+    @media (max-width: 600px) {
+      .titulo { font-size: 1.5em; }
+      .bloque { max-width: 98vw; }
+      .input { font-size: 1em; }
+    }
+    @media (max-width: 400px) {
+      .titulo { font-size: 1.1em; }
+      .input { font-size: 0.9em; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Playlist musicale continue -->
+  <audio id="audio1" src="https://files.catbox.moe/h8kswn.m4a" autoplay></audio>
+  <audio id="audio2" src="https://files.catbox.moe/zaw8i4.mp3"></audio>
+  <audio id="audio3" src="https://files.catbox.moe/os7lz1.m4a"></audio>
+
+  <div class="titulo">Test 1</div>
+
+  <div class="bloque" id="bloque-nombre">
+    <div class="label">Pon el nombre de tu destinatario aquí:</div>
+    <div class="input-row">
+      <span class="timer" id="timer-nombre">20</span>
+      <input class="input" id="input-nombre" type="text" maxlength="30" placeholder="Nombre del destinatario">
+      <button class="check-btn" id="check-nombre" style="display:none;">✔</button>
+    </div>
+    <div class="msg" id="msg-nombre"></div>
+  </div>
+
+  <div class="bloque" id="bloque-numero" style="display:none;">
+    <div class="label">¡Pon el número de tu destinatario aquí!</div>
+    <div class="input-row">
+      <span class="timer" id="timer-numero">20</span>
+      <input class="input" id="input-numero" type="tel" maxlength="20" placeholder="Número del destinatario">
+      <button class="check-btn" id="check-numero" style="display:none;">✔</button>
+    </div>
+    <div class="msg" id="msg-numero"></div>
+  </div>
+
+  <div class="msg" id="msg-final"></div>
+
+  <script>
+    // Gestion musique enchaînée et continue
+    let audios = [
+      document.getElementById('audio1'),
+      document.getElementById('audio2'),
+      document.getElementById('audio3')
+    ];
+    let currentAudio = 0;
+    audios.forEach((audio, idx) => {
+      audio.addEventListener('ended', function() {
+        currentAudio = (currentAudio + 1) % audios.length;
+        audios[currentAudio].currentTime = 0;
+        audios[currentAudio].play();
+      });
+      if(idx !== 0) audio.pause();
+    });
+
+    // Chronomètre pour le nom
+    let timerNombre = 20, timerNombreUsed = 0, timerNombreInterval, nombreValid = false;
+    let timerNumero = 20, timerNumeroUsed = 0, timerNumeroInterval, numeroValid = false;
+    let bloqueNombre = document.getElementById('bloque-nombre');
+    let bloqueNumero = document.getElementById('bloque-numero');
+    let inputNombre = document.getElementById('input-nombre');
+    let checkNombre = document.getElementById('check-nombre');
+    let timerNombreSpan = document.getElementById('timer-nombre');
+    let msgNombre = document.getElementById('msg-nombre');
+    let inputNumero = document.getElementById('input-numero');
+    let checkNumero = document.getElementById('check-numero');
+    let timerNumeroSpan = document.getElementById('timer-numero');
+    let msgNumero = document.getElementById('msg-numero');
+    let msgFinal = document.getElementById('msg-final');
+
+    // Chrono nom
+    function startNombreTimer() {
+      timerNombreSpan.textContent = timerNombre;
+      timerNombreInterval = setInterval(() => {
+        timerNombre--;
+        timerNombreUsed++;
+        timerNombreSpan.textContent = timerNombre;
+        if(timerNombre <= 0) {
+          clearInterval(timerNombreInterval);
+          inputNombre.disabled = true;
+          checkNombre.disabled = true;
+          msgNombre.textContent = "No te gusta esta persona";
+          msgFinal.innerHTML = "No puedes continuar durante 1 hora.<br>Tiempo restante: <span id='chrono1h'>3600</span> s";
+          bloqueNumero.style.display = "none";
+          start1hTimer();
+        }
+      }, 1000);
+    }
+    function start1hTimer() {
+      let chrono = 3600;
+      let chronoSpan = document.getElementById('chrono1h');
+      setInterval(() => {
+        chrono--;
+        if(chronoSpan) chronoSpan.textContent = chrono;
+      }, 1000);
+    }
+    inputNombre.addEventListener('input', function() {
+      checkNombre.style.display = inputNombre.value.trim() ? "inline-flex" : "none";
+    });
+    checkNombre.addEventListener('click', function() {
+      if(inputNombre.value.trim()) {
+        nombreValid = true;
+        clearInterval(timerNombreInterval);
+        inputNombre.disabled = true;
+        checkNombre.disabled = true;
+        msgNombre.innerHTML = `<span style="color:#00ff99;">✔</span> Tiempo usado: ${timerNombreUsed} s`;
+        bloqueNumero.style.display = "flex";
+        startNumeroTimer();
+      }
+    });
+    startNombreTimer();
+
+    // Chrono numéro
+    function startNumeroTimer() {
+      timerNumeroSpan.textContent = timerNumero;
+      timerNumeroInterval = setInterval(() => {
+        timerNumero--;
+        timerNumeroUsed++;
+        timerNumeroSpan.textContent = timerNumero;
+        if(timerNumero <= 0) {
+          clearInterval(timerNumeroInterval);
+          inputNumero.disabled = true;
+          checkNumero.disabled = true;
+          msgNumero.textContent = "No te gusta esta persona";
+          msgFinal.innerHTML = "No puedes continuar durante 1 hora.<br>Tiempo restante: <span id='chrono1h2'>3600</span> s";
+          start1hTimer2();
+        }
+      }, 1000);
+    }
+    function start1hTimer2() {
+      let chrono = 3600;
+      let chronoSpan = document.getElementById('chrono1h2');
+      setInterval(() => {
+        chrono--;
+        if(chronoSpan) chronoSpan.textContent = chrono;
+      }, 1000);
+    }
+    inputNumero.addEventListener('input', function() {
+      checkNumero.style.display = inputNumero.value.trim() ? "inline-flex" : "none";
+    });
+    checkNumero.addEventListener('click', function() {
+      if(inputNumero.value.trim()) {
+        numeroValid = true;
+        clearInterval(timerNumeroInterval);
+        inputNumero.disabled = true;
+        checkNumero.disabled = true;
+        msgNumero.innerHTML = `<span style="color:#00ff99;">✔</span> Tiempo usado: ${timerNumeroUsed} s`;
+        // Ici tu peux continuer la logique (bouton "crear", animation, etc.)
+        msgFinal.innerHTML = `<button id="crearBtn" style="margin-top:20px;font-size:1.2em;padding:10px 30px;background:#ff69b4;color:#fff;border:none;border-radius:10px;cursor:pointer;">Crear</button>`;
+        document.getElementById('crearBtn').onclick = function() {
+          window.location.href = "misterio_crear.html?nombre=" + encodeURIComponent(inputNombre.value.trim()) + "&numero=" + encodeURIComponent(inputNumero.value.trim());
+        };
+      }
+    });
+  </script>
+</body>
+</html>

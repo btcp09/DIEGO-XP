@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Venta de Números</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html {
+      font-size: 17px;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #101010;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .glow-marquee {
+      margin-top: 40px;
+      margin-bottom: 24px;
+      font-size: 2em;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      filter: drop-shadow(0 0 18px #fff8);
+      text-align: center;
+      transition: color 0.7s;
+      line-height: 1.1;
+    }
+    .country-label {
+      color: #ff69b4;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 14px;
+      cursor: pointer;
+      text-decoration: underline;
+      transition: color 0.2s;
+    }
+    .country-select {
+      margin: 14px 0 22px 0;
+      font-size: 1em;
+      padding: 10px 18px;
+      border-radius: 12px;
+      border: 2px solid #ff69b4;
+      background: #222;
+      color: #fff;
+      outline: none;
+    }
+    .price-box {
+      margin: 18px 0 12px 0;
+      padding: 12px 20px;
+      background: #1a2e1a;
+      border-radius: 12px;
+      color: #00ff99;
+      font-size: 1.1em;
+      font-weight: bold;
+      display: none;
+      min-width: 120px;
+    }
+    .buy-btn {
+      margin: 18px 0 12px 0;
+      background: none;
+      border: none;
+      color: #ffe066;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      text-shadow: 0 0 10px #000, 0 0 20px #ffe06688;
+      transition: color 0.2s, transform 0.2s;
+      padding: 10px 18px;
+      border-radius: 10px;
+    }
+    .buy-btn:hover {
+      color: #fff700;
+      transform: scale(1.05);
+      background: #222;
+    }
+    .choose-seller-box {
+      margin: 18px 0 0 0;
+      background: #222;
+      border-radius: 14px;
+      padding: 18px 12px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 0 16px #000a;
+    }
+    .choose-label {
+      color: #00eaff;
+      font-size: 1.1em;
+      font-weight: bold;
+      margin-bottom: 14px;
+    }
+    .seller-btn {
+      margin: 10px 0;
+      padding: 10px 22px;
+      border-radius: 10px;
+      border: none;
+      font-size: 1.1em;
+      font-weight: bold;
+      background: linear-gradient(90deg, #ff0055, #00ff99, #ffea00, #a259ff, #ff00ff, #00eaff, #ff0055);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 0 10px #fff4;
+    }
+    .seller-btn:hover {
+      background: linear-gradient(270deg, #ff0055, #00ff99, #ffea00, #a259ff, #ff00ff, #00eaff, #ff0055);
+      transform: scale(1.05);
+    }
+    @media (max-width: 600px) {
+      html { font-size: 15px; }
+      .glow-marquee { font-size: 1.1em; }
+      .country-label { font-size: 1em; }
+      .country-select { font-size: 0.95em; padding: 7px 8px; }
+      .price-box { font-size: 0.95em; min-width: 90px; padding: 7px 8px;}
+      .buy-btn { font-size: 0.95em; padding: 7px 8px; }
+      .choose-label { font-size: 0.95em; }
+      .seller-btn { font-size: 0.95em; padding: 7px 8px; }
+    }
+    @media (max-width: 400px) {
+      html { font-size: 13px; }
+      .glow-marquee { font-size: 1em; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Musique automatique en boucle -->
+  <audio id="audioNum" src="https://files.catbox.moe/qda847.m4a" autoplay loop></audio>
+
+  <!-- Titre multicolore changeant -->
+  <div class="glow-marquee" id="glowText">VENTE DES NUMÉROS AVEC DIEGO</div>
+
+  <!-- Choix du pays -->
+  <div>
+    <div class="country-label" onclick="document.getElementById('countrySelect').focus()">number country</div>
+    <select class="country-select" id="countrySelect">
+      <option value="">Selecciona un código de país</option>
+      <option value="+91">+91</option>
+      <option value="+92">+92</option>
+      <option value="+93">+93</option>
+      <option value="+94">+94</option>
+    </select>
+  </div>
+
+  <!-- Prix -->
+  <div class="price-box" id="priceBox">El precio es de 1500 cubacel</div>
+
+  <!-- Acheter -->
+  <button class="buy-btn" id="buyBtn" style="display:none;">Comprar</button>
+
+  <!-- Choix du vendeur -->
+  <div class="choose-seller-box" id="chooseSellerBox">
+    <div class="choose-label">¿Quién quieres que te venda?</div>
+    <button class="seller-btn" onclick="goWhatsapp('+50942389267')">+50942389267</button>
+    <button class="seller-btn" onclick="goWhatsapp('+5363200706')">+5363200706</button>
+  </div>
+
+  <script>
+    // Couleurs pour le texte changeant
+    const colors = [
+      "#ff0055", "#00ff99", "#ffea00", "#a259ff", "#ff00ff", "#00eaff", "#ff69b4", "#00ff99"
+    ];
+    let colorIndex = 0;
+    setInterval(() => {
+      const glow = document.getElementById('glowText');
+      glow.style.color = colors[colorIndex];
+      colorIndex = (colorIndex + 1) % colors.length;
+    }, 700);
+
+    // Afficher le prix après sélection du pays
+    const countrySelect = document.getElementById('countrySelect');
+    const priceBox = document.getElementById('priceBox');
+    const buyBtn = document.getElementById('buyBtn');
+    const chooseSellerBox = document.getElementById('chooseSellerBox');
+
+    countrySelect.addEventListener('change', function() {
+      if (countrySelect.value) {
+        priceBox.style.display = "block";
+        buyBtn.style.display = "inline-block";
+      } else {
+        priceBox.style.display = "none";
+        buyBtn.style.display = "none";
+        chooseSellerBox.style.display = "none";
+      }
+    });
+
+    buyBtn.addEventListener('click', function() {
+      chooseSellerBox.style.display = "flex";
+      chooseSellerBox.scrollIntoView({behavior: "smooth"});
+    });
+
+    function goWhatsapp(numero) {
+      // Arrêter la musique avant de quitter la page
+      const audio = document.getElementById('audioNum');
+      if(audio) audio.pause();
+      // Rediriger vers WhatsApp
+      window.location.href = "https://wa.me/" + numero.replace(/\D/g, "");
+    }
+  </script>
+</body>
+</html>

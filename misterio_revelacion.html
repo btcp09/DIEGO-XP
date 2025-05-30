@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Misterio - Revelación</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background: #181818;
+      color: #fff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .top-bar {
+      width: 100vw;
+      max-width: 500px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      margin-top: 10px;
+    }
+    .top-link {
+      color: #ff69b4;
+      font-weight: bold;
+      font-size: 1.1em;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 18px;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+    .top-link:active {
+      background: #ff69b4;
+      color: #fff;
+    }
+    .titulo {
+      color: #ff69b4;
+      font-size: 2em;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+      letter-spacing: 2px;
+    }
+    .bloque {
+      background: #232323;
+      border-radius: 18px;
+      padding: 24px 18px;
+      margin: 18px 0;
+      box-shadow: 0 0 12px #0006;
+      width: 95vw;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .pregunta {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #ffb6e6;
+      text-align: center;
+    }
+    .opciones {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin-bottom: 10px;
+      gap: 10px;
+    }
+    .opcion-btn {
+      background: #00eaff;
+      color: #181818;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 0;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      width: 100%;
+    }
+    .opcion-btn.selected, .opcion-btn:active {
+      background: #ff69b4;
+      color: #fff;
+    }
+    .respuesta {
+      margin: 10px 0 0 0;
+      background: #181818;
+      color: #00ff99;
+      border-radius: 8px;
+      padding: 10px;
+      width: 100%;
+      font-size: 1.1em;
+      text-align: center;
+      border: 1px solid #00eaff;
+      pointer-events: none;
+    }
+    textarea {
+      width: 100%;
+      min-height: 80px;
+      max-width: 100%;
+      max-height: 200px;
+      font-size: 1.1em;
+      border-radius: 8px;
+      border: none;
+      padding: 10px;
+      background: #222;
+      color: #fff;
+      margin-bottom: 10px;
+      resize: vertical;
+    }
+    textarea[disabled] {
+      background: #444;
+      color: #bbb;
+    }
+    .enviar-btn {
+      margin: 24px 0 16px 0;
+      background: #ff69b4;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 38px;
+      font-size: 1.2em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: block;
+    }
+    .enviar-btn:active {
+      background: #00eaff;
+      color: #181818;
+    }
+    .mensaje-final {
+      color: #00ff99;
+      font-size: 1.2em;
+      margin: 20px 0 0 0;
+      text-align: center;
+      font-weight: bold;
+    }
+    .code-box {
+      background: #232323;
+      color: #ffea00;
+      font-size: 1.3em;
+      font-weight: bold;
+      border-radius: 8px;
+      padding: 10px 18px;
+      margin: 10px 0;
+      text-align: center;
+      letter-spacing: 4px;
+      user-select: all;
+    }
+    .copiar-btn {
+      margin: 10px 0;
+      background: #00eaff;
+      color: #181818;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 28px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .copiar-btn:active {
+      background: #ff69b4;
+      color: #fff;
+    }
+    @media (max-width: 600px) {
+      .titulo { font-size: 1.2em; }
+      .bloque { max-width: 98vw; }
+      .pregunta { font-size: 1em; }
+      .opcion-btn { font-size: 1em; }
+      .respuesta { font-size: 1em; }
+      .code-box { font-size: 1em; }
+    }
+    @media (max-width: 400px) {
+      .titulo { font-size: 1em; }
+      .pregunta { font-size: 0.9em; }
+      .opcion-btn { font-size: 0.9em; }
+      .respuesta { font-size: 0.9em; }
+      .code-box { font-size: 0.9em; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Musique continue -->
+  <audio id="audio1" src="https://files.catbox.moe/h8kswn.m4a" autoplay></audio>
+  <audio id="audio2" src="https://files.catbox.moe/zaw8i4.mp3"></audio>
+  <audio id="audio3" src="https://files.catbox.moe/os7lz1.m4a"></audio>
+  <div class="top-bar">
+    <button class="top-link" id="destinatarioBtn">Destinatario</button>
+    <button class="top-link" id="bandejaBtn">Bandeja de recepción</button>
+  </div>
+  <div class="titulo" id="nombreDestinatario"></div>
+  <div id="formulario" style="width:100%;">
+    <div class="bloque">
+      <div class="pregunta">¿Cómo lo describes?</div>
+      <div class="opciones" id="opciones1">
+        <button class="opcion-btn">Como mis ojos</button>
+        <button class="opcion-btn">Como un ángel</button>
+        <button class="opcion-btn">Como un faro</button>
+      </div>
+      <div class="respuesta" id="respuesta1" style="display:none;"></div>
+    </div>
+    <div class="bloque">
+      <div class="pregunta">¿Desde cuándo lo admiras?</div>
+      <textarea id="respuesta2" maxlength="60" placeholder="Escribe aquí (máx 60 palabras)"></textarea>
+    </div>
+    <div class="bloque">
+      <div class="pregunta">¿Qué harías por él/ella?</div>
+      <div class="opciones" id="opciones3">
+        <button class="opcion-btn">Cuidarlo/a</button>
+        <button class="opcion-btn">Hacerlo/a feliz</button>
+        <button class="opcion-btn">Protegerlo/a</button>
+      </div>
+      <div class="respuesta" id="respuesta3" style="display:none;"></div>
+    </div>
+    <div class="bloque">
+      <div class="pregunta">Envíale un mensaje</div>
+      <textarea id="mensaje" maxlength="400" placeholder="Escribe tu mensaje aquí (máx 60 palabras)"></textarea>
+    </div>
+    <button class="enviar-btn" id="enviarBtn">Guardar</button>
+    <div class="mensaje-final" id="mensajeFinal"></div>
+    <div id="codeSection" style="display:none;">
+      <div class="code-box" id="codigoBox"></div>
+      <button class="copiar-btn" id="copiarCodigoBtn">Copiar código</button>
+      <div class="mensaje-final" id="msgIrBandeja"></div>
+    </div>
+  </div>
+  <div id="bandeja" style="display:none;">
+    <div class="bloque">
+      <div class="pregunta">Introduce tu código de acceso:</div>
+      <input id="inputCodigo" maxlength="4" style="font-size:1.3em;text-align:center;width:120px;border-radius:8px;border:none;padding:10px;background:#222;color:#fff;">
+      <button class="enviar-btn" id="verificarCodigoBtn">Verificar</button>
+      <div class="mensaje-final" id="msgCodigo"></div>
+    </div>
+    <div id="infoBandeja" style="display:none;">
+      <div class="bloque" id="respuestasBandeja"></div>
+    </div>
+  </div>
+  <script>
+    // Musique enchaînée continue
+    let audios = [
+      document.getElementById('audio1'),
+      document.getElementById('audio2'),
+      document.getElementById('audio3')
+    ];
+    let currentAudio = 0;
+    audios.forEach((audio, idx) => {
+      audio.addEventListener('ended', function() {
+        currentAudio = (currentAudio + 1) % audios.length;
+        audios[currentAudio].currentTime = 0;
+        audios[currentAudio].play();
+      });
+      if(idx !== 0) audio.pause();
+    });
+
+    // Récupère le nom du destinataire depuis l'URL
+    function getParam(name) {
+      let url = new URL(window.location.href);
+      return url.searchParams.get(name) || '';
+    }
+    const nombre = getParam('nombre');
+    document.getElementById('nombreDestinatario').innerHTML = nombre
+      ? `<span style="background: linear-gradient(90deg,#ff69b4,#00eaff,#ffea00,#00ff99);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:bold;">${nombre}</span>`
+      : "Destinatario";
+
+    // Gestion des questions
+    const opciones1 = document.querySelectorAll('#opciones1 .opcion-btn');
+    const respuesta1 = document.getElementById('respuesta1');
+    opciones1.forEach(btn => {
+      btn.onclick = function() {
+        opciones1.forEach(b => b.disabled = true);
+        btn.classList.add('selected');
+        respuesta1.textContent = btn.textContent;
+        respuesta1.style.display = "block";
+      }
+    });
+    const opciones3 = document.querySelectorAll('#opciones3 .opcion-btn');
+    const respuesta3 = document.getElementById('respuesta3');
+    opciones3.forEach(btn => {
+      btn.onclick = function() {
+        opciones3.forEach(b => b.disabled = true);
+        btn.classList.add('selected');
+        respuesta3.textContent = btn.textContent;
+        respuesta3.style.display = "block";
+      }
+    });
+
+    // Génération et gestion du code
+    let code = "";
+    document.getElementById('enviarBtn').onclick = function() {
+      // Génère un code à 4 chiffres
+      code = Math.floor(1000 + Math.random() * 9000).toString();
+      document.getElementById('codeSection').style.display = "block";
+      document.getElementById('codigoBox').textContent = code;
+      document.getElementById('mensajeFinal').textContent = "¡Tus respuestas han sido guardadas!";
+      document.getElementById('enviarBtn').disabled = true;
+    };
+    document.getElementById('copiarCodigoBtn').onclick = function() {
+      navigator.clipboard.writeText(code).then(() => {
+        document.getElementById('msgIrBandeja').innerHTML = `<button class="enviar-btn" onclick="mostrarBandeja()">Ir a la bandeja de recepción</button>`;
+      });
+    };
+
+    // Navigation entre formulaire et bandeja
+    document.getElementById('destinatarioBtn').onclick = function() {
+      document.getElementById('formulario').style.display = "block";
+      document.getElementById('bandeja').style.display = "none";
+    };
+    document.getElementById('bandejaBtn').onclick = function() {
+      mostrarBandeja();
+    };
+    function mostrarBandeja() {
+      document.getElementById('formulario').style.display = "none";
+      document.getElementById('bandeja').style.display = "block";
+    }
+
+    // Vérification du code et affichage des réponses
+    // ...existing code...
+document.getElementById('verificarCodigoBtn').onclick = function() {
+  let inputCode = document.getElementById('inputCodigo').value;
+  if(inputCode === code) {
+  // Génère un beau message aléatoire
+  const mensajesBonitos = [
+    "🌟 Eres la luz que ilumina mis días. Gracias por existir. 🌟",
+    "💖 Tu sonrisa tiene el poder de alegrar mi mundo. 💖",
+    "✨ Cada momento contigo es un regalo que atesoro. ✨",
+    "🌈 Eres especial, único/a y maravilloso/a. 🌈",
+    "💌 Gracias por ser tú, por estar y por hacerme feliz. 💌"
+  ];
+  const mensajeAleatorio = mensajesBonitos[Math.floor(Math.random() * mensajesBonitos.length)];
+  // Redirige vers la nouvelle page avec le message dans l'URL
+  window.location.href = "mensaje_recibido.html?mensaje=" + encodeURIComponent(mensajeAleatorio);
+}
+};
+// ...existing code...
+  </script>
+</body>
+</html>

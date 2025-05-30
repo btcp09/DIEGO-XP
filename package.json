@@ -1,0 +1,15 @@
+{
+  "name": "sms-twilio",
+  "version": "1.0.0",
+  "description": "Envoi de SMS avec Twilio",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "twilio": "^4.17.0"
+  },
+  "author": "Diego",
+  "license": "ISC"
+}

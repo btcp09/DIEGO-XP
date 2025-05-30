@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>PRIME MARKET</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #101010;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .ball {
+      width: 70px; height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff0055, #00ff99, #ffea00, #a259ff, #ff00ff);
+      background-size: 300% 300%;
+      animation: roll 2.5s cubic-bezier(.68,-0.55,.27,1.55) 1, colorball 2s infinite alternate;
+      margin: 60px auto 40px auto;
+      position: relative;
+      box-shadow: 0 0 40px #fff8, 0 0 80px #0ff4;
+      z-index: 1;
+      top: 0;
+    }
+    @keyframes roll {
+      0% { transform: translateX(-200px) rotate(0deg);}
+      60% { transform: translateX(0px) rotate(360deg);}
+      100% { transform: translateX(0px) rotate(720deg);}
+    }
+    @keyframes colorball {
+      0% { filter: hue-rotate(0deg);}
+      100% { filter: hue-rotate(360deg);}
+    }
+    .multicolor-title {
+      font-size: 4em;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      margin-top: 0;
+      margin-bottom: 30px;
+      background: linear-gradient(90deg, #ff0055, #00ff99, #ffea00, #a259ff, #ff00ff, #00eaff, #ff0055);
+      background-size: 400% 400%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 2.5s linear infinite alternate;
+      text-align: center;
+      filter: drop-shadow(0 0 12px #fff8);
+      position: relative;
+      z-index: 2;
+      line-height: 1.1;
+    }
+    .entrar-box {
+      position: relative;
+      z-index: 2;
+    }
+    .entrar-btn {
+      font-size: 2em;
+      font-weight: bold;
+      padding: 22px 70px;
+      border: 4px solid;
+      border-image: linear-gradient(90deg, #ff0055, #00ff99, #ff00ff, #ffea00, #a259ff, #ff0055) 1;
+      border-radius: 18px;
+      background: #181818;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 24px #fff4, 0 0 60px #0ff2;
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: bordercolor 2s linear infinite;
+      filter: drop-shadow(0 0 12px #fff8);
+      position: relative;
+      z-index: 2;
+    }
+    .entrar-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 40px #fff8, 0 0 100px #0ff6;
+    }
+    @keyframes bordercolor {
+      0% { border-image-source: linear-gradient(90deg, #ff0055, #00ff99, #ff00ff, #ffea00, #a259ff, #ff0055);}
+      100% { border-image-source: linear-gradient(270deg, #ff0055, #00ff99, #ff00ff, #ffea00, #a259ff, #ff0055);}
+    }
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+    @media (max-width: 600px) {
+      .multicolor-title { font-size: 2em; }
+      .entrar-btn { font-size: 1.1em; padding: 14px 18px; }
+      .ball { margin-top: 30px; margin-bottom: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="ball"></div>
+  <div class="multicolor-title">PRIME MARKET</div>
+  <div class="entrar-box">
+    <button class="entrar-btn">Entrar</button>
+  </div>
+<script>
+  document.querySelector('.entrar-btn').addEventListener('click', function() {
+    window.location.href = "page.html";
+  });
+</script>
+</body>
+</html>

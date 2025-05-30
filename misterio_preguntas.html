@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Misterio - Preguntas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background: #181818;
+      color: #fff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .titulo {
+      color: #ff69b4;
+      font-size: 2em;
+      font-weight: bold;
+      margin-top: 40px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .bloque {
+      background: #232323;
+      border-radius: 18px;
+      padding: 24px 18px;
+      margin: 18px 0;
+      box-shadow: 0 0 12px #0006;
+      width: 95%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .pregunta {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #ffb6e6;
+      text-align: center;
+    }
+    .opciones {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin-bottom: 10px;
+      gap: 10px;
+    }
+    .opcion-btn {
+      background: #00eaff;
+      color: #181818;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 0;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      width: 100%;
+    }
+    .opcion-btn.selected, .opcion-btn:active {
+      background: #ff69b4;
+      color: #fff;
+    }
+    .respuesta {
+      margin: 10px 0 0 0;
+      background: #181818;
+      color: #00ff99;
+      border-radius: 8px;
+      padding: 10px;
+      width: 100%;
+      font-size: 1.1em;
+      text-align: center;
+      border: 1px solid #00eaff;
+      pointer-events: none;
+    }
+    textarea {
+      width: 100%;
+      min-height: 80px;
+      max-width: 100%;
+      max-height: 200px;
+      font-size: 1.1em;
+      border-radius: 8px;
+      border: none;
+      padding: 10px;
+      background: #222;
+      color: #fff;
+      margin-bottom: 10px;
+      resize: vertical;
+    }
+    textarea[disabled] {
+      background: #444;
+      color: #bbb;
+    }
+    .enviar-btn {
+      margin: 24px 0 16px 0;
+      background: #ff69b4;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 38px;
+      font-size: 1.2em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: block;
+    }
+    .enviar-btn:active {
+      background: #00eaff;
+      color: #181818;
+    }
+    .mensaje-final {
+      color: #00ff99;
+      font-size: 1.2em;
+      margin: 20px 0 0 0;
+      text-align: center;
+      font-weight: bold;
+    }
+    @media (max-width: 600px) {
+      .titulo { font-size: 1.2em; }
+      .bloque { max-width: 98vw; }
+      .pregunta { font-size: 1em; }
+      .opcion-btn { font-size: 1em; }
+      .respuesta { font-size: 1em; }
+    }
+    @media (max-width: 400px) {
+      .titulo { font-size: 1em; }
+      .pregunta { font-size: 0.9em; }
+      .opcion-btn { font-size: 0.9em; }
+      .respuesta { font-size: 0.9em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="titulo">Preguntas</div>
+  <div class="bloque">
+    <div class="pregunta">¿Cómo lo describes?</div>
+    <div class="opciones" id="opciones1">
+      <button class="opcion-btn">Como mis ojos</button>
+      <button class="opcion-btn">Como un ángel</button>
+      <button class="opcion-btn">Como un faro</button>
+    </div>
+    <div class="respuesta" id="respuesta1" style="display:none;"></div>
+  </div>
+  <div class="bloque">
+    <div class="pregunta">¿Desde cuándo lo admiras?</div>
+    <textarea id="respuesta2" maxlength="60" placeholder="Escribe aquí (máx 60 palabras)"></textarea>
+  </div>
+  <div class="bloque">
+    <div class="pregunta">¿Qué harías por él/ella?</div>
+    <div class="opciones" id="opciones3">
+      <button class="opcion-btn">Cuidarlo/a</button>
+      <button class="opcion-btn">Hacerlo/a feliz</button>
+      <button class="opcion-btn">Protegerlo/a</button>
+    </div>
+    <div class="respuesta" id="respuesta3" style="display:none;"></div>
+  </div>
+  <div class="bloque">
+    <div class="pregunta">Envíale un mensaje</div>
+    <textarea id="mensaje" maxlength="400" placeholder="Escribe tu mensaje aquí (máx 60 palabras)"></textarea>
+  </div>
+  <button class="enviar-btn" id="enviarBtn">Guardar</button>
+  <div class="mensaje-final" id="mensajeFinal"></div>
+  <script>
+    // Gestion des options question 1
+    const opciones1 = document.querySelectorAll('#opciones1 .opcion-btn');
+    const respuesta1 = document.getElementById('respuesta1');
+    opciones1.forEach(btn => {
+      btn.onclick = function() {
+        opciones1.forEach(b => b.disabled = true);
+        btn.classList.add('selected');
+        respuesta1.textContent = btn.textContent;
+        respuesta1.style.display = "block";
+      }
+    });
+    // Gestion des options question 3
+    const opciones3 = document.querySelectorAll('#opciones3 .opcion-btn');
+    const respuesta3 = document.getElementById('respuesta3');
+    opciones3.forEach(btn => {
+      btn.onclick = function() {
+        opciones3.forEach(b => b.disabled = true);
+        btn.classList.add('selected');
+        respuesta3.textContent = btn.textContent;
+        respuesta3.style.display = "block";
+      }
+    });
+    // Gestion du bouton "Guardar"
+    document.getElementById('enviarBtn').onclick = function() {
+      opciones1.forEach(b => b.disabled = true);
+      opciones3.forEach(b => b.disabled = true);
+      document.getElementById('respuesta2').disabled = true;
+      document.getElementById('mensaje').disabled = true;
+      document.getElementById('enviarBtn').disabled = true;
+      document.getElementById('mensajeFinal').textContent = "¡Tus respuestas han sido guardadas!";
+    };
+  </script>
+</body>
+</html>

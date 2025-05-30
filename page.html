@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>PRIME MARKET - Servicios</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #101010;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .multicolor-title {
+      font-size: 3.2em;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      margin-top: 40px;
+      margin-bottom: 35px;
+      background: linear-gradient(90deg, #ff0055, #00ff99, #ffea00, #a259ff, #ff00ff, #00eaff, #ff0055);
+      background-size: 400% 400%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 2.5s linear infinite alternate;
+      text-align: center;
+      filter: drop-shadow(0 0 12px #fff8);
+      line-height: 1.1;
+    }
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+    .services-list {
+      margin: 40px 0 50px 0;
+      width: 98vw;
+      max-width: 540px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .service-link {
+      display: block;
+      font-size: 2em;
+      font-weight: 700;
+      padding: 24px 0;
+      border-radius: 16px;
+      text-align: center;
+      background: #181818;
+      color: #fff;
+      text-decoration: none;
+      box-shadow: 0 0 18px #000a;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      transition: background 0.2s, border 0.2s, transform 0.2s;
+      position: relative;
+      z-index: 1;
+    }
+    .service-link:hover {
+      background: linear-gradient(90deg, #ff0055, #00ff99, #ffea00, #a259ff, #ff00ff, #00eaff, #ff0055);
+      color: #111;
+      border: 2px solid #fff;
+      transform: scale(1.04);
+      font-weight: bold;
+      box-shadow: 0 0 30px #fff8, 0 0 60px #0ff4;
+    }
+    .back-home {
+      margin: 40px 0 0 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .back-btn {
+      font-size: 1.7em;
+      font-weight: bold;
+      padding: 18px 60px;
+      border: 3px solid;
+      border-image: linear-gradient(90deg, #ff0055, #00ff99, #ff00ff, #ffea00, #a259ff, #ff0055) 1;
+      border-radius: 18px;
+      background: #181818;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 18px #fff4, 0 0 40px #0ff2;
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: bordercolor 2s linear infinite;
+      outline: none;
+      position: relative;
+      z-index: 2;
+    }
+    .back-btn:hover {
+      transform: scale(1.06);
+      box-shadow: 0 0 30px #fff8, 0 0 80px #0ff6;
+    }
+    @keyframes bordercolor {
+      0% { border-image-source: linear-gradient(90deg, #ff0055, #00ff99, #ff00ff, #ffea00, #a259ff, #ff0055);}
+      100% { border-image-source: linear-gradient(270deg, #ff0055, #00ff99, #ff00ff, #ffea00, #a259ff, #ff0055);}
+    }
+    /* Footer */
+    .footer {
+      width: 100vw;
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 0 18px 18px 18px;
+      box-sizing: border-box;
+      z-index: 10;
+      background: transparent;
+      pointer-events: none;
+    }
+    .footer-content {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      pointer-events: auto;
+    }
+    .help-anim {
+      font-size: 1.5em;
+      font-weight: bold;
+      background: linear-gradient(90deg, #ff0055, #00ff99, #ffea00, #a259ff, #ff00ff, #00eaff, #ff0055);
+      background-size: 400% 400%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 2s linear infinite alternate, fadeIn 1.5s;
+      cursor: pointer;
+      text-shadow: 0 0 10px #000;
+      border: none;
+      outline: none;
+      padding: 0;
+      margin: 0 0 8px 0;
+      transition: text-shadow 0.2s;
+      white-space: nowrap;
+      position: relative;
+      z-index: 2;
+    }
+    .help-anim:hover {
+      text-shadow: 0 0 20px #fff, 0 0 40px #0ff;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0;}
+      to { opacity: 1;}
+    }
+    .join-anim {
+      font-size: 1.3em;
+      font-weight: bold;
+      background: linear-gradient(270deg, #ff0055, #00ff99, #ffea00, #a259ff, #ff00ff, #00eaff, #ff0055);
+      background-size: 400% 400%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 3s linear infinite alternate, fadeIn 1.5s;
+      cursor: pointer;
+      text-shadow: 0 0 10px #000;
+      border: none;
+      outline: none;
+      padding: 0;
+      margin: 0 0 8px 0;
+      transition: text-shadow 0.2s;
+      white-space: nowrap;
+      position: relative;
+      z-index: 2;
+    }
+    .join-anim:hover {
+      text-shadow: 0 0 20px #fff, 0 0 40px #0ff;
+    }
+    @media (max-width: 600px) {
+      .multicolor-title { font-size: 1.5em; }
+      .services-list { max-width: 99vw; }
+      .service-link { font-size: 1.1em; padding: 12px 0; }
+      .back-btn { font-size: 1em; padding: 10px 18px; }
+      .footer { padding: 0 6px 8px 6px;}
+      .help-anim, .join-anim { font-size: 1em; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Musique automatique -->
+  <audio id="audio1" src="https://files.catbox.moe/sqjig4.mp3" autoplay></audio>
+  <audio id="audio2" src="https://files.catbox.moe/3sitln.mp3"></audio>
+
+  <!-- Titre multicolore -->
+  <h1 class="multicolor-title">Nuestros Servicios PRIME MARKET</h1>
+
+  <!-- Liste des services -->
+  <div class="services-list">
+    <a class="service-link" href="vcf.html">1. Generación de VCF</a>
+    <a class="service-link" href="numero.html">2. Números en venta</a>
+    <a class="service-link" href="panel.html">3. Panel</a>
+    <a class="service-link" href="apk premuim.html">4. APK Premium</a>
+    <a class="service-link" href="musica.html">5. Descarga de música</a>
+    <a class="service-link" href="instagram.html">6. Compra de seguidores en Instagram</a>
+    <a class="service-link" href="misterio.html">7. Misterio</a>
+    <a class="service-link" href="test_pareja.html" style="background: linear-gradient(90deg,#ff69b4,#00eaff,#ffea00); color:#181818;">8. Test Pareja 💑</a>
+  </div>
+
+  <!-- Retour à l'accueil -->
+  <div class="back-home">
+    <button class="back-btn" onclick="goHome()">Volver al inicio</button>
+  </div>
+
+  <!-- Pied de page -->
+<div class="footer">
+  <div class="footer-content">
+    <span class="join-anim" onclick="joinGroup()">Únete a nuestro equipo</span>
+    <span class="help-anim" onclick="window.location.href='https://wa.me/50942389267'">¿Necesitas ayuda?</span>
+  </div>
+</div>
+
+  <script>
+    // Musique automatique enchaînée
+    const audio1 = document.getElementById('audio1');
+    const audio2 = document.getElementById('audio2');
+    audio1.addEventListener('ended', () => {
+      audio2.play();
+    });
+
+    // Retour à la page d'accueil
+    function goHome() {
+      window.location.href = "index.html";
+    }
+    // Redirection WhatsApp groupe
+    function joinGroup() {
+      window.location.href = "https://chat.whatsapp.com/HoZmJTc0tnn0nZweEc5fyk";
+    }
+  </script>
+</body>
+</html>
